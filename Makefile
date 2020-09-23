@@ -6,7 +6,7 @@ SRC_PATH := src/
 OBJ_PATH := build/
 INC_PATH := -Iinclude/
 
-TARGET := tcp_client tcp_server worker
+TARGET := tcp_client tcp_server tcp_worker udp_client udp_server udp_worker
 DEPS := socket.o inet_socket.o utils.o
 
 SRC := $(notdir $(wildcard $(SRC_PATH)*.c ))

@@ -16,14 +16,11 @@ int inet_accept(int fd) {
 
 int inet_connect(const char *addr, in_port_t port, int type) {
   int fd;
-  struct sockaddr_in sa;
-
-  sa.sin_family = FAMILY;
-  sa.sin_addr.s_addr = inet_addr(addr);
-  sa.sin_port = htons(port);
+  struct sockaddr sa;
 
   fd = socket_create(FAMILY, type, 0);
-  socket_connect(fd, (struct sockaddr *)&sa, sizeof(sa));
+  set_sockaddr(&sa, FAMILY, addr, port);
+  socket_connect(fd, &sa, sizeof(sa));
 
   return fd;
 }
@@ -33,7 +30,7 @@ static int inet_passive_socket(const char *addr, in_port_t port, int type,
   int fd, ret;
   int optval = 1;
   socklen_t s;
-  struct sockaddr_in sa;
+  struct sockaddr sa;
 
   fd = socket_create(FAMILY, type, 0);
 
@@ -45,12 +42,10 @@ static int inet_passive_socket(const char *addr, in_port_t port, int type,
     }
   }
 
-  sa.sin_family = FAMILY;
-  sa.sin_addr.s_addr = inet_addr(addr);
-  sa.sin_port = htons(port);
+  set_sockaddr(&sa, FAMILY, addr, port);
   s = sizeof(sa);
 
-  socket_bind(fd, (struct sockaddr *)&sa, s);
+  socket_bind(fd, &sa, s);
 
   if (do_listen)
     socket_listen(fd, backlog);

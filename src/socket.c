@@ -39,3 +39,13 @@ void socket_connect(int fd, const struct sockaddr *sa, socklen_t len) {
     perror_die("connect: connect return -1", 1);
   }
 }
+
+void set_sockaddr(struct sockaddr *sa, int fa, const char *addr,
+                  in_addr_t port) {
+  struct sockaddr_in *ptr;
+
+  ptr = (struct sockaddr_in *)sa;
+  ptr->sin_family = fa;
+  ptr->sin_addr.s_addr = inet_addr(addr);
+  ptr->sin_port = htons(port);
+}

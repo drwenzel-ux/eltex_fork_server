@@ -13,13 +13,14 @@ SRC := $(notdir $(wildcard $(SRC_PATH)*.c ))
 OBJ := $(patsubst %.c, $(OBJ_PATH)%.o, $(SRC))
 DEPS := $(addprefix $(OBJ_PATH), $(DEPS))
 
-.PHONY: $(TARGET) all clean
+.PHONY: clean
 
-all: $(OBJ) $(TARGET)
+all: $(TARGET)
 
-$(TARGET): $(DEPS)
+.SECONDEXPANSION:
+$(TARGET): $(DEPS) $(OBJ_PATH)$$@.o
 	@echo [INFO] Creating Binary Executable [$@]
-	@$(CC) -o $@  $(OBJ_PATH)$@.o $^
+	@$(CC) -o $@ $^
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@echo [CC] $<
